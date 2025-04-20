@@ -30,10 +30,13 @@ public class FlightService {
 
     private void findRoutes(String current, String destination, List<String> path, int priceSoFar, int flightsSoFar, Integer maxFlights, Set<String> visited){
         if (current.equals(destination)) {
-            List<String> routeCities = new ArrayList<>(path);
-            routes.add(new Route(routeCities, priceSoFar));
+            if (path.size() > 1) {
+                List<String> routeCities = new ArrayList<>(path);
+                routes.add(new Route(routeCities, priceSoFar));
+            }
             return;
         }
+
 
         if (maxFlights != null && flightsSoFar >= maxFlights){
             return;

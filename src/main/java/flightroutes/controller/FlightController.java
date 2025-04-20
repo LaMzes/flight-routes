@@ -3,12 +3,13 @@ package flightroutes.controller;
 import flightroutes.model.RequestDTO;
 import flightroutes.model.ResponseDTO;
 import flightroutes.model.Route;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import flightroutes.service.FlightService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/flights")
@@ -18,7 +19,7 @@ public class FlightController {
     private FlightService flightService;
 
     @PostMapping("/routes")
-    public List<ResponseDTO> getRoutes(@RequestBody RequestDTO request) {
+    public ResponseEntity<List<ResponseDTO>> getRoutes(@Valid @RequestBody RequestDTO request) {
 
         List<Route> routes = flightService.getAllRoutes(
                 request.getOrigin(),
@@ -26,12 +27,14 @@ public class FlightController {
                 request.getMaxFlights()
         );
 
-        return routes.stream()
+        List<ResponseDTO> response = routes.stream()
                 .map(route -> new ResponseDTO(route.getCities(), route.getTotalPrice()))
-                .collect(Collectors.toList());
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/test")
+    @GetMapping("/flightroutes/test")
     public String test() {
         return "API is running!";
     }
