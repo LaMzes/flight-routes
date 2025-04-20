@@ -33,9 +33,4 @@ public class FlightController {
 
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/flightroutes/test")
-    public String test() {
-        return "API is running!";
-    }
 }
